@@ -1,10 +1,21 @@
+generator client {
+  // provider = "prisma-client-js"
+   provider = "prisma-client"
+    output   = "../src/generated"
+}
+
+datasource db {
+  provider = "postgresql"
+  
+}
+
 model User {
   id                 String     @id @default(uuid())
   email              String     @unique
   password           String
   role               UserRole   @default(PATIENT)
   needPasswordChange Boolean    @default(true)
-  status             UserStatus
+  status             UserStatus @default(ACTIVE)
   createdAt          DateTime   @default(now())
   updatedAt          DateTime   @updatedAt
   admin              Admin?
@@ -57,7 +68,7 @@ model Patient {
   name         String
   email        String   @unique
   profilePhoto String?
-  address      String
+  address      String?
   isDeleted    Boolean  @default(false)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
@@ -66,3 +77,24 @@ model Patient {
 
   @@map("patients")
 }
+
+
+enum UserRole {
+  PATIENT
+  DOCTOR
+  ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  DELETED
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHERS
+}
+
+
